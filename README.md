@@ -21,4 +21,4 @@ Procedure:
 - Download the script from my repository (http://gitlab.cisco.com/aligarci/root_key.git) and place it in the same folder as your RootKey-appbundle-1.0-x86_64.tar.gz. 
 - Execute the script, a message will be shown on console:
 
-![alt text](https://techzone.cisco.com/t5/image/serverpage/image-id/146656i9EB2CD2E0DD37A30/image-size/large?v=1.0&px=800 "RootKey checker execution example")
+![alt text](https://github.com/77alisse77/expiration_checker/blob/master/root_key_not_expired.PNG) "RootKey checker execution example")
