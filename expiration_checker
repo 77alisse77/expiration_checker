@@ -1,0 +1,74 @@
+import time
+import tarfile
+import datetime
+import os.path
+import os
+
+__author__ = 'Alicia Garcia Sastre, aligarci'
+__version__ = '1.0'
+
+EXPIRATION_DATE_PATTERN = "EXPIRY_DATE="
+
+
+def get_path(wrong_path: str) -> str:
+    print("\nRoot key is not detected in " + wrong_path + " or it's not a valid .tar.gz file")
+    print("\nPlease write the exact path where RootKey bundle is located.")
+    return input("Example: C:\RootKey-appbundle-1.0-x86_64.tar.gz\n\n")
+
+
+def decrypt_file(file_key: str) -> str:
+    tar0 = tarfile.open(file_key, "r:gz")
+
+    bundle_member = tar0.getmember('bundle.tar')
+    f0 = tar0.extractfile(bundle_member)
+    
+    tar = tarfile.open(" ", "r", f0)
+
+    for member in tar.getmembers():
+        f = tar.extractfile(member)  # f is an ExFileObject, member is a TarInfo
+        content = f.read()
+        str_stream = content.decode(encoding='latin-1')
+
+        if "EXPIRY_DATE=" in str_stream:
+            return str_stream
+
+    print("No expiration date found. Looks like the file is corrupt or this is not a rootkey file")
+    return ""
+
+
+def get_expiration_date(st: str) -> int:
+    index_of_unix_date = st.index(EXPIRATION_DATE_PATTERN) + len(EXPIRATION_DATE_PATTERN)
+    return int(st[index_of_unix_date:index_of_unix_date + 10])  # 10 is the length of the unix date
+
+
+def is_expired(expiry_date: int) -> bool:
+    timestamp = int(time.time())
+
+    if(expiry_date - timestamp) > 0:
+        return False
+    return True
+
+
+def main():
+    tarball = r"RootKey-appbundle-1.0-x86_64.tar.gz"  # Default name
+
+    # Looks for the default filename on the folder where the script is located
+    # If not found there, it will ask user
+    while not (os.path.isfile(tarball) and tarfile.is_tarfile(tarball)):
+        tarball = get_path(tarball)
+
+    file_content = decrypt_file(tarball)
+
+    if file_content != "":
+        expiry_date = get_expiration_date(file_content)
+
+        if is_expired(expiry_date):
+            print(tarball, "has expired")
+        else:
+            print("\n", tarball, "has not yet expired. \n\nThe expiration date is:")
+            print(datetime.datetime.fromtimestamp(int(expiry_date)).strftime('%Y-%m-%d %H:%M:%S'))
+
+
+if __name__ == '__main__':
+    main()
+    time.sleep(60)
