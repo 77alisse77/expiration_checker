@@ -18,7 +18,7 @@ Prerequisites:
 - Python installed on your computer. You can get it from https://www.python.org/downloads/. I'm using python 3.6
  
 Procedure:
-- Download the script from my repository (http://gitlab.cisco.com/aligarci/root_key.git) and place it in the same folder as your RootKey-appbundle-1.0-x86_64.tar.gz. 
+- Download the script from my repository (https://github.com/77alisse77/expiration_checker/blob/master/expiration_checker) and place it in the same folder as your RootKey-appbundle-1.0-x86_64.tar.gz. 
 - Execute the script, a message will be shown on console:
 
 ![alt text](https://github.com/77alisse77/expiration_checker/blob/master/root_key_not_expired.PNG) 
